@@ -1,5 +1,5 @@
 class Function < ApplicationRecord
-  validates :name, presence: true, uniqueness: { scope: :user_id }, format: { with: /\A[0-9a-z_]+[\?!]?\z/i }
+  validates :name, presence: true, uniqueness: { scope: :user_id }
   validates :usage, presence: true
   validates :code, presence: true, code: true
   validates :user, presence: true
@@ -12,6 +12,8 @@ class Function < ApplicationRecord
   has_many :likes, dependent: :destroy, as: :likeable
   has_many :saves, dependent: :destroy
 
+  before_validation :function_name
+
   def to_param
     name
   end
@@ -22,8 +24,21 @@ class Function < ApplicationRecord
 
   private
 
-  def assign_function_name
-    first_function = Code.new(code).functions.first
-    self.name = first_function if first_function
+  def find_first_function(ast)
+    return ast.children.first.to_s if ast.respond_to?('type') && ast.type == :DEFN
+
+    return unless ast.respond_to?('children')
+
+    ast.children.each do |child|
+      func_name = find_first_function(child)
+      return func_name if func_name
+    end
+  end
+
+  def function_name
+    self.name = find_first_function(RubyVM::AbstractSyntaxTree.parse(code))
+  rescue SyntaxError
+    errors.add(:has_syntax_error, 'code has syntax error')
+    throw(:abort)
   end
 end
