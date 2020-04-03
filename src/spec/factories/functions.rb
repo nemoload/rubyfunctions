@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :function do
-    name { Faker::Alphanumeric.alphanumeric(number: 10) }
-    usage  { Faker::Lorem.paragraph }
-    code { Faker::Lorem.paragraph }
+    usage { Faker::Lorem.paragraph }
+    sequence :code do |n|
+      "def foo#{n}; end"
+    end
     association :user
 
     trait :invalid_name do
