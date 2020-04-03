@@ -1,5 +1,5 @@
 class Function < ApplicationRecord
-  validates :name, presence: true, uniqueness: { scope: :user_id }, format: { with: /\A[0-9a-z_]+\z/i }
+  validates :name, presence: true, uniqueness: { scope: :user_id }
   validates :usage, presence: true
   validates :code, presence: true
   validates :user, presence: true
@@ -31,7 +31,8 @@ class Function < ApplicationRecord
 
   def function_name
     self.name = find_first_function(RubyVM::AbstractSyntaxTree.parse(code))
-  rescue ErrorClass
-    self.name = nil
+  rescue SyntaxError
+    errors.add(:has_syntax_error, 'code has syntax error')
+    throw(:abort)
   end
 end
