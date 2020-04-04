@@ -6,7 +6,7 @@ class Function < ApplicationRecord
 
   belongs_to :user
 
-  before_validation :function_name
+  before_validation :validate_function_name
 
   def to_param
     name
@@ -30,9 +30,15 @@ class Function < ApplicationRecord
     nil
   end
 
-  def function_name
-    self.name = find_first_function(RubyVM::AbstractSyntaxTree.parse(code))
+  def validate_function_name
+    extract_function_name
   rescue SyntaxError
+    self.name = nil
     errors.add(:code, :syntax_error)
+  end
+
+  def extract_function_name
+    ast = RubyVM::AbstractSyntaxTree.parse(code.to_s)
+    self.name = find_first_function(ast)
   end
 end
