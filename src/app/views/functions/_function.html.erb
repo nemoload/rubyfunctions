@@ -1,7 +1,7 @@
 <% full ||= false %>
 
 <div class="card <%= 'is-clipped' unless full %> m-b-md" tabindex="0">
-  <header class="card-header">
+  <header class="card-header is-shadowless">
     <div class="card-header-title">
       <div class="media">
         <div class="media-left">
@@ -13,15 +13,15 @@
         </div>
         <div class="media-content">
           <p class="title is-5">
-            <%= link_to user_functions_path(function.user) do %>
-              <%= function.user.name %>
+            <%= link_to [function.user, function] do %>
+              <%= function.name %>
             <% end %>
           </p>
           <p class="subtitle is-6">
-            <%= link_to [function.user, function] do %>
-              <%= function.name %> <br/>
+            <%= link_to user_functions_path(function.user) do %>
+              <%= function.user.name %>
             <% end %>
-            <small class="has-text-grey-light is-small"><%= function.created_at.to_s(:long) %></small>
+            <small class="has-text-grey-light"> · @<%= function.user.username %> · <%= distance_of_time_in_words_to_now function.created_at %></small>
           </p>
         </div>
       </div>
@@ -29,11 +29,11 @@
 
     <%= link_to edit_user_function_path(function.user, function), class: 'card-header-icon' do %>
       <span class="icon"> <i class="fas fa-edit"></i> </span>
-    <% end if can?(current_user, function, :edit) %>
+    <% end if can?(function, :edit) %>
 
     <%= link_to [function.user, function], method: :delete, data: { confirm: 'Are you sure?' }, class: 'card-header-icon has-text-danger' do %>
       <span class="icon"> <i class="fas fa-trash"></i> </span>
-    <% end if can?(current_user, function, :destroy) %>
+    <% end if can?(function, :destroy) %>
 
     <% unless full %>
       <div class="card-header-icon">
@@ -50,4 +50,13 @@
   </div>
 
   <%= render_code function.code if full %>
+
+  <div class="card-content has-text-grey-light">
+    <small>
+    <i class="fas fa-thumbs-up"></i> <%= function.likes.count %> ·
+    <i class="fas fa-comment"></i> <%= function.comments.count %>
+    </small>
+  </div>
+
+  <%= render 'function_footer', function: function if current_user && full %>
 </div>
