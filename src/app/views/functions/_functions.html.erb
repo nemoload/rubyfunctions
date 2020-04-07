@@ -1,26 +1,4 @@
-<div class="tabs">
-  <ul>
-    <% if current_page?(controller: 'functions', action: 'index')%>
-      <li class="is-active">
-    <% else %>
-      <li>
-    <% end %>
-    <%= link_to user_functions_path(@user), title: 'Saved functions' do %>
-        Your functions
-    <% end %>
-    </li>
-    
-    <% if current_page?(controller: 'saves', action: 'index')%>
-      <li class="is-active">
-    <% else %>
-      <li>
-    <% end %>
-    <%= link_to user_saves_path(@user), title: 'Saved functions' do %>
-        Saved Functions
-    <% end %>
-    </li>
-  </ul>
-</div>
+<%= render 'users/tabs', { user: user } %>
 <%= render functions %>
 
 <%= link_to 'Load More', user_functions_path(user, offset: @next), remote: true, class: 'button is-fullwidth more' if @next %>

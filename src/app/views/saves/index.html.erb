@@ -1,4 +1,9 @@
 <h1 class="is-size-3">Saved functions</h1>
 <hr/>
 
+<%= render 'users/tabs', { user: user } %>
+<% if @functions.empty? %>
+  <h1 class="is-size-2 has-text-centered">Saved functions</h1>
+<% end %>
+
 <%= render partial: 'functions/functions', collection: @functions, locals: { functions: @functions } %>
