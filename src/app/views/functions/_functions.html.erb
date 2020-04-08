@@ -1,4 +1,3 @@
-<%= render 'users/tabs', { user: user } %>
 <%= render functions %>
 
 <%= link_to 'Load More', user_functions_path(user, offset: @next), remote: true, class: 'button is-fullwidth more' if @next %>

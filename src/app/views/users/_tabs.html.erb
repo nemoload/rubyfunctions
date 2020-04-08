@@ -6,10 +6,10 @@
       <li>
     <% end %>
     <%= link_to user_functions_path(user), title: 'Saved functions' do %>
-        Your functions
+        Published functions
     <% end %>
     </li>
-    
+
     <% if current_page?(controller: 'saves', action: 'index')%>
       <li class="is-active">
     <% else %>
