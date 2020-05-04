@@ -1,25 +1,23 @@
-<div class="box">
+<div class="box is-shadowless">
   <article class="media">
     <div class="media-left">
-      <figure class="image is-64x64">
+      <figure class="image is-48x48">
         <%= image_tag user_image_url(comment.user), class: 'is-rounded' %>
       </figure>
     </div>
     <div class="media-content">
       <div class="content">
-        <p>
-          <%= link_to user_functions_path(comment.user) do %>
-            <strong><%= comment.user.name %></strong>
-          <% end %>
-          <small class="has-text-grey-light"> · @<%= comment.user.username %> · <%= distance_of_time_in_words_to_now comment.created_at %></small>
+        <%= link_to comment.user.name, user_functions_path(comment.user) %>
+        <small class="has-text-grey-light">
+          · @<%= comment.user.username %>
+          · <%= distance_of_time_in_words_to_now comment.created_at %>
+          <%= link_to icon('fas fa-edit'), edit_user_function_comment_path(user_id: comment.function.user, function_id: comment.function, id: comment) if can?(comment, :edit) %>
+          <%= link_to icon('fas fa-trash'), [comment.function.user, comment.function, comment], method: :delete, data: { confirm: 'Are you sure?' }, class: 'has-text-danger' if can?(comment, :destroy) %>
+        </small>
+      </div>
 
-          <%= link_to [comment.function.user, comment.function, comment], method: :delete, data: { confirm: 'Are you sure?' }, class: 'has-text-danger' do %>
-            <small><span class="icon"> <i class="fas fa-trash"></i> </span></small>
-          <% end if can?(comment, :destroy) %>
-
-          <br>
-          <%= simple_format comment.content %>
-        </p>
+      <div class="content">
+        <%= render_markdown comment.content %>
       </div>
     </div>
   </article>

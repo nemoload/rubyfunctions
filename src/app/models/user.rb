@@ -1,12 +1,21 @@
 class User < ApplicationRecord
   validates :name, presence: true
-  validates :username, presence: true, uniqueness: true, format: { with: /\A[0-9a-z_\-\.]+\z/i }
+  validates :username, presence: true, uniqueness: true, format: { with: /\A[0-9a-z_\-]+\z/i }
   validates :github_id, presence: true, uniqueness: true
 
   has_many :functions, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :saves, dependent: :destroy
+
+  has_many :notifications, foreign_key: :recipient_id, inverse_of: :recipient,
+                           class_name: 'Notification::Notification', dependent: :destroy
+
+  has_many :followings, class_name: :Followership, foreign_key: :follower_id,
+                        inverse_of: :follower, dependent: :destroy
+
+  has_many :followers, class_name: :Followership, foreign_key: :followee_id,
+                       inverse_of: :followee, dependent: :destroy
 
   def to_param
     username

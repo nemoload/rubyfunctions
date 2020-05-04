@@ -1,4 +1,6 @@
 class SavesController < ApplicationController
+  layout 'users', only: %i[index]
+
   before_action :set_user, only: %i[index create destroy]
   before_action :set_function, only: %i[create destroy]
   before_action :set_save, only: :destroy
@@ -8,15 +10,18 @@ class SavesController < ApplicationController
   def index
     offset = params.fetch(:offset, 0).to_i
     @saves = @user.saves.includes(:function).limit(LIMIT).offset(offset).order(created_at: :desc).all
-    @next = offset + LIMIT if @user.saves.count == LIMIT
+    @next = offset + LIMIT if @saves.size == LIMIT
   end
 
   def create
     @save = current_user.saves.new(function: @function)
     raise UnauthorizedException unless can?(@save, action_name.to_sym)
 
-    @save.save
-    redirect_back fallback_location: [@user, @function]
+    if @save.save
+      redirect_back fallback_location: [@user, @function]
+    else
+      redirect_back fallback_location: [@user, @function], alert: @save.errors.full_messages
+    end
   end
 
   def destroy

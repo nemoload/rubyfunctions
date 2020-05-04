@@ -5,15 +5,18 @@ ruby '~>2.6.3'
 gem 'rails', '~> 6.0.0'
 
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'kramdown'
+gem 'kramdown-parser-gfm'
 gem 'pg'
 gem 'puma', '~> 4.3'
 gem 'rest-client'
 gem 'rouge'
 gem 'sass-rails', '~> 6'
-gem 'webpacker', '~> 5.0'
+gem 'webpacker', '~> 5.1'
 
 group :development, :test do
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'pry-rails'
   gem 'rspec-rails'
 end
@@ -25,8 +28,8 @@ end
 
 group :test do
   gem 'codecov', require: false
-  gem 'faker'
   gem 'shoulda-matchers'
+  gem 'webmock'
 end
 
 group :production do

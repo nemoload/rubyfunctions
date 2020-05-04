@@ -42,19 +42,21 @@
 
           <% if current_user %>
 
-            <%= link_to new_user_function_path(current_user), class: 'button is-link' do %>
-              <span>New function</span>
-              <span class="icon"> <i class="fas fa-plus"></i> </span>
+            <%= link_to notifications_path , class: 'button is-white' do %>
+              <%= icon('far fa-bell') %>
+              <span class="tag is-danger is-small is-rounded"><%= unread_notifications(current_user)  unless unread_notifications(current_user) == 0 %></span>
             <% end %>
 
-            <%= link_to session_path, method: :delete, class: 'button has-text-danger' do %>
-              <span>Logout</span>
-              <span class="icon"> <i class="fas fa-power-off"></i> </span>
+            <%= link_to new_user_function_path(current_user), class: 'button is-link' do %>
+              <span>New function</span>
+              <%= icon('fas fa-plus') %>
             <% end %>
+
+            <%= link_to icon('fas fa-power-off'), session_path, method: :delete, class: 'button has-text-danger' %>
           <% else %>
 
             <%= link_to "https://github.com/login/oauth/authorize?client_id=#{ENV["GITHUB_CLIENT_ID"]}", class: 'button' do %>
-              <span class="icon"> <i class="fab fa-github"></i> </span>
+              <%= icon('fab fa-github') %>
               <span>Login with Github</span>
             <% end %>
 
