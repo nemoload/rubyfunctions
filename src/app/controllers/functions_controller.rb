@@ -30,6 +30,10 @@ class FunctionsController < ApplicationController
 
   def create
     @function = @user.functions.new(function_params)
+    tags = params[:tags]
+    @function.tags = tags.split(',').map do |tag|
+      Tag.find_or_create_by(name: tag.strip)
+    end
     check_permission
 
     if @function.save

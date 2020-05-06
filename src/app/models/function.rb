@@ -12,6 +12,8 @@ class Function < ApplicationRecord
   has_many :likes, dependent: :destroy, as: :likeable
   has_many :saves, dependent: :destroy
 
+  has_and_belongs_to_many :tags 
+
   def to_param
     name
   end

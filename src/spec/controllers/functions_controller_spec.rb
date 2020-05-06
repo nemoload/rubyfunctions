@@ -48,19 +48,20 @@ RSpec.describe FunctionsController, type: :controller do
     context 'with valid params' do
       it 'creates a new Function' do
         expect do
-          post :create, params: { function: valid_attributes, user_id: user }
+          post :create, params: { function: valid_attributes, user_id: user, tags: 'foo, bar, foobar' }
         end.to change(Function, :count).by(1)
+           .and change(Tag, :count).by(3)
       end
 
       it 'redirects to the created function' do
-        post :create, params: { function: valid_attributes, user_id: user }
-        expect(response).to redirect_to([user, user.functions.last])
+        post :create, params: { function: valid_attributes, user_id: user}
+        expect(response).to redirect_to([user, user.functions.last])  
       end
     end
 
     context 'with invalid params' do
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: { function: invalid_attributes, user_id: user }
+        post :create, params: { function: invalid_attributes, user_id: user}
         expect(response).to be_successful
       end
     end
