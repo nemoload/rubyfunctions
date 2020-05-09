@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'tags/show'
-  get 'tags/index'
   resources :users, only: [] do
     resources :functions do
       resources :comments, only: %i[create edit update destroy]
