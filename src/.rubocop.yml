@@ -25,3 +25,5 @@ Layout/LineLength:
   Max: 120
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
+Rails/HasAndBelongsToMany:
+  Enabled: false

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'tags/show'
+  get 'tags/index'
   resources :users, only: [] do
     resources :functions do
       resources :comments, only: %i[create edit update destroy]
@@ -14,6 +16,7 @@ Rails.application.routes.draw do
   resource :session, only: [:destroy]
 
   resources :notifications, only: %i[show index]
+  resources :tags, only: %i[show index]
 
   get 'timelines/latest', to: 'timelines#latest'
   get 'timelines/liked', to: 'timelines#liked'

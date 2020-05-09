@@ -2,8 +2,15 @@ require 'rails_helper'
 
 RSpec.describe FunctionsController, type: :controller do
   let(:valid_attributes) { build(:function).attributes }
+  let(:valid_attributes_with_tags) { valid_attributes }
   let(:invalid_attributes) { build(:function, :invalid_name).attributes }
   let(:user) { create :user }
+
+  let!(:tags_count) { rand(3..9) }
+  let!(:tags) { tags_count.times.map { Faker::Hacker.adjective }.uniq }
+
+  let(:tags_list_count) { tags.size }
+  let(:tags_list) { tags.join(', ') }
 
   before { session[:user] = user.id }
 
@@ -48,9 +55,9 @@ RSpec.describe FunctionsController, type: :controller do
     context 'with valid params' do
       it 'creates a new Function' do
         expect do
-          post :create, params: { function: valid_attributes, user_id: user, tags: 'foo, bar, foobar' }
+          post :create, params: { function: valid_attributes.merge(tags_list: tags_list), user_id: user }
         end.to change(Function, :count).by(1)
-                                       .and change(Tag, :count).by(3)
+                                       .and change(Tag, :count).by(tags_list_count)
       end
 
       it 'redirects to the created function' do

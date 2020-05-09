@@ -30,10 +30,6 @@ class FunctionsController < ApplicationController
 
   def create
     @function = @user.functions.new(function_params)
-    tags = params[:tags]
-    @function.tags = tags.split(',').map do |tag|
-      Tag.find_or_create_by(name: tag.strip)
-    end
     check_permission
 
     if @function.save
@@ -69,7 +65,7 @@ class FunctionsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def function_params
-    params.require(:function).permit(:usage, :code)
+    params.require(:function).permit(:usage, :code, :tags_list)
   end
 
   def check_permission
