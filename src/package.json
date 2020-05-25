@@ -2,12 +2,12 @@
   "name": "rubyfunctions",
   "private": true,
   "dependencies": {
-    "@rails/ujs": "^6.0.0-alpha",
+    "@rails/ujs": "^6.0.3",
     "@rails/webpacker": "5.1.1",
-    "codemirror": "^5.53.2"
+    "codemirror": "^5.54.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   }
 }
